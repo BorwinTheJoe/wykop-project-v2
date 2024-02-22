@@ -1,0 +1,2 @@
+2024/02/22	12:45:47	d748e068-7ee4-4fd4-81f5-635360ef5f92	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\views\index.html'
+2024/02/22	12:48:11	bbf15872-3ab7-4573-b583-568f4d20bd58	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\wykop-project-v2\routes\views\index.html'

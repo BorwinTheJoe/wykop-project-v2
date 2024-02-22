@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const cors = require('cors');
 //importing logger method from logEvents.
 const {reqlogger} = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
@@ -11,6 +12,9 @@ const PORT = process.env.PORT || 3500;
 // logging requests.
 app.use(reqlogger);
 
+// Cross Origin Resource Sharing.
+app.use(cors());
+
 // middleware for handling url-encoded data
 app.use(express.urlencoded({extended: false}));
 
@@ -20,10 +24,7 @@ app.use(express.json());
 // middleware for serving static files, like css, from the public folder.
 app.use(express.static(path.join(__dirname, '/public')));
 
-// Using regex to respond with the index.html file.
-app.get(`^/$|/index(.html)?`, (req, res) => {
-    res.sendFile(path.join(__dirname, `views`, `index.html`));
-});
+app.use('/', require('./routes/root'));
 
 // Responding with a custom 404 status page.
 app.all('*', (req, res) => {
