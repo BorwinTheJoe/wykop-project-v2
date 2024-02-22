@@ -1,0 +1,5 @@
+2024/02/22	12:12:38	4635e5ef-a153-4e14-8b73-147ebb1e8509	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\views\index.html'
+2024/02/22	12:12:38	942b1387-296f-438a-8cd7-b58799cd883d	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\wykop-project-v2\views\404.html'
+2024/02/22	12:15:39	7c0400cd-de13-4a5b-812f-af427fba88fa	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\wykop-project-v2\views\404.html'
+2024/02/22	12:16:33	3f682d0b-1892-4873-8e7a-d242cfc308c1	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\wykop-project-v2\views\404.html'
+2024/02/22	12:20:37	ec498ac3-b4c1-4dc9-902a-7f09ca0c448f	Error: ENOENT: no such file or directory, stat 'C:\Users\ADMIN\Desktop\Projekty\wykop-project-v2\views\404.html'
