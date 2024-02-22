@@ -19,7 +19,6 @@ app.use(express.json());
 
 // middleware for serving static files, like css, from the public folder.
 app.use(express.static(path.join(__dirname, '/public')));
-// For some reason CSS request doesn't get sent through public? 
 
 // Using regex to respond with the index.html file.
 app.get(`^/$|/index(.html)?`, (req, res) => {
@@ -39,7 +38,5 @@ app.all('*', (req, res) => {
 });
 
 app.use(errorHandler);
-
-console.log(path.join(__dirname));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
