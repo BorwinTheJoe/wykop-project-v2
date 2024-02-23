@@ -1,3 +1,4 @@
+// .env contains link to mongodb; Also contains the Secret for Access and Refresh Tokens.
 require('dotenv').config();
 const express = require('express');
 const app = express();
