@@ -11,6 +11,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 //importing method for connecting to the Database.
 const connectDB = require('./config/dbConn');
+const mongoose = require('mongoose');
 
 // Server port set in .env, or a Default port.
 const PORT = process.env.PORT || 3500;
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 // --- Routes! --- //
 
 app.use('/', require('./routes/root'));
+app.use('/register', require('./routes/register'));
 
 // Responding with a custom 404 status page if nothing before caught this.
 app.all('*', (req, res) => {
@@ -53,4 +55,7 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connection.once('open', () => {
+    console.log('connected to MongoDB');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
