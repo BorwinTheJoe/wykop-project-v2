@@ -1,4 +1,5 @@
 // .env contains link to mongodb; Also contains the Secret for Access and Refresh Tokens.
+// To generate ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET, use require('crypto).randomBytes(number).toString('hex') in node.
 require('dotenv').config();
 const express = require('express');
 const app = express();
