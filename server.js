@@ -13,14 +13,26 @@ const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('./config/dbConn');
 const mongoose = require('mongoose');
 
+//importing cookie parser and credentials options.
+const credentials = require('./middleware/credentials');
+const cookieParser = require('cookie-parser');
+
+//Importing middleware for handling verifying Json Web Tokens.
+const verifyJWT = require('./middleware/verifyJWT');
+
 // Server port set in .env, or a Default port.
 const PORT = process.env.PORT || 3500;
+
+// ---- END OF IMPORTS! ---- //
 
 // Connecting to MongoDB
 connectDB();
 
 // logging requests.
 app.use(reqlogger);
+
+// Handle options Credentials check and fetch cookies credentials req.
+app.use(credentials);
 
 // Cross Origin Resource Sharing.
 app.use(cors(corsOptions));
@@ -31,15 +43,25 @@ app.use(express.urlencoded({extended: false}));
 // middleware for serving json.
 app.use(express.json());
 
+app.use(cookieParser());
+
 // middleware for serving static files, like css, from the public folder.
 app.use(express.static(path.join(__dirname, '/public')));
-
 
 
 // --- Routes! --- //
 
 app.use('/', require('./routes/root'));
 app.use('/register', require('./routes/register'));
+app.use('/auth', require('./routes/auth'));
+app.use('/refresh', require('./routes/refresh'));
+app.use('/logout', require('./routes/logout'));
+
+// Routes only accessible if you have the access token. //
+app.use(verifyJWT);
+app.use('/users', require('./routes/api/users'));
+app.use('/articles', require('./routes/api/articles'));
+
 
 // Responding with a custom 404 status page if nothing before caught this.
 app.all('*', (req, res) => {
