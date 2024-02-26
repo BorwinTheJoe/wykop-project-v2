@@ -35,7 +35,7 @@ const handleLogin = async (req, res) => {
                 console.log('attempted refresh token reuse at login!');
                 newRefreshTokenArray = [];
             }
-
+            //Secure to False solely because thunderbird doesn't take itself as secure.
             res.clearCookie('jwt', {
                 httpOnly: true,
                 sameSite: 'None',
@@ -47,6 +47,7 @@ const handleLogin = async (req, res) => {
         const result = await foundUser.save();
         console.log(result);
 
+        //Secure to False solely because thunderbird doesn't take itself as secure.
         res.cookie('jwt', newRefreshToken, {
             httpOnly: true,
             sameSite: 'None',

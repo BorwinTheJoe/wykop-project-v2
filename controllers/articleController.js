@@ -8,26 +8,12 @@ const handleNewArticle = async (req, res) => {
 
     const duplicate = await Article.findOne({ title: title}).exec();
     if (duplicate) return res.sendStatus(409);
-    
-    let user;
-    // Check if user has a JWT?
-    const authHeader = req.headers.authorization || req.headers.Authorization;
-    if (authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
-    const token = authHeader.split(' ')[1];
-    jwt.verify(
-        token,
-        process.env.ACCESS_TOKEN_SECRET,
-        (err, decoded) => {
-            if (err) return res.sendStatus(403); // Invalid Token.
-            user = decoded.UserInfo.username;
-        }
-    );
 
     try {
         const result = await Article.create({
             title: title,
             content: content,
-            author: user
+            author: req.user
             // How to define the author being the logged in person?
             // Potentially issues due to using the same variable name as model's data name
             // Try to update the author user's "posts" with the ID of THIS post?

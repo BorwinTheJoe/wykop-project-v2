@@ -5,6 +5,8 @@ const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
+
+    //Secure to False solely because thunderbird doesn't take itself as secure.
     res.clearCookie('jwt', {
         httpOnly: true,
         sameSite: 'None',
@@ -55,6 +57,7 @@ const handleRefreshToken = async (req, res) => {
         const result = await foundUser.save();
 
         // Create Secure cookie with refresh Token
+        //Secure to False solely because thunderbird doesn't take itself as secure.
         res.cookie('jwt', newRefreshToken, {
             httpOnly: true,
             sameSite: 'None',
