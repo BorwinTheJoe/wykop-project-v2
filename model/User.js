@@ -18,6 +18,16 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    articles: [
+        {
+            _id: {
+                type: String
+            },
+            title: {
+                type: String
+            }
+        }
+    ],
     refreshToken: [String]
 });
 

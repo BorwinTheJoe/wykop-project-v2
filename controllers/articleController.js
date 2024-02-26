@@ -1,4 +1,5 @@
 const Article = require('../model/Article');
+const User = require('../model/User');
 
 const handleNewArticle = async (req, res) => {
     const {title, content} = req.body;
