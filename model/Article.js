@@ -21,8 +21,18 @@ const articleSchema = new Schema({
         default: Date.now,
         required: true
     },
+    tags: [
+        {
+            tag: {
+                type: String
+            }
+        }
+    ],
     comments: [
         {
+            author: {
+                type: String
+            },
             body: {
                 type: String
             },

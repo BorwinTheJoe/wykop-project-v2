@@ -73,11 +73,14 @@ const editArticle = async (req, res) => {
     if (!article) {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
-    // TODO: overwriting the contents and title of an Article.
-    // Refuse to proceed with edit if title is a duplicate.
-    // Note: Allow duplicate Titles and use ID's only?
-    // Note: search methods based off keywords?
-    // Note: Article Tags?
+
+    if (req.body?.title) article.title = req.body.title;
+    if (req.body?.content) article.content = req.body.content;
+    if (req.body?.tags) article.tags = req.body.tags;
+
+    const result = await article.save();
+    res.json(result);
+    // TODO: check if the user is an Author in articles API. Allow Author **or** admin/moderator to edit and delete.
 }
 
 module.exports = { 
