@@ -1,6 +1,8 @@
 const Article = require('../model/Article');
 const User = require('../model/User');
 const jwt = require ('jsonwebtoken');
+const ROLES_LIST = require('../config/roles_list');
+const verifyRoles = require('../middleware/verifyRoles');
 
 const handleNewArticle = async (req, res) => {
     const {title, content} = req.body;
@@ -46,6 +48,9 @@ const deleteArticle = async (req, res) => {
     if (!article) {
         return res.status(204).json({ message: `Article ID ${req.body.id} not found`});
     }
+    if (!verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator)||article.author !== req.user) {
+        return res.sendStatus(401);
+    }
     const result = await article.deleteOne({ _id: req.body.id});
     res.json(result);
     // Get ID from front-end via button use?
@@ -62,6 +67,7 @@ const getArticle = async (req, res) => {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
     res.json(article);
+    //For some reason, an ID that doesn't exist in the database tries to reply with the structure of the entire database.
 };
 
 // ------------------------//
@@ -73,6 +79,9 @@ const editArticle = async (req, res) => {
     if (!article) {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
+    if (!verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator)||article.author !== req.user) {
+        return res.sendStatus(401);
+    }
 
     if (req.body?.title) article.title = req.body.title;
     if (req.body?.content) article.content = req.body.content;
@@ -80,7 +89,7 @@ const editArticle = async (req, res) => {
 
     const result = await article.save();
     res.json(result);
-    // TODO: check if the user is an Author in articles API. Allow Author **or** admin/moderator to edit and delete.
+    // For some reason, the correctly called ID Returns code 204 without any additional message, but an un-existing ID tries to reply with the structure of the entire database.
 }
 
 module.exports = { 

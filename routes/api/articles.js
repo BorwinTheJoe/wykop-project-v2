@@ -13,6 +13,6 @@ router
 router
     .route('/:id')
     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator, ROLES_LIST.User), articleController.getArticle)
-    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator), articleController.editArticle);
+    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator, ROLES_LIST.User), articleController.editArticle);
 
 module.exports = router;
