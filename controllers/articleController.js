@@ -44,6 +44,14 @@ const getAllArticles = async (req, res) => {
 const deleteArticle = async (req, res) => {
     if (!req?.body?.id) return res.status(400).json({ message: 'Article ID required'});
 
+
+    //Delete article using Body instead of Params. Why??
+    const requestedId = req.params.id;
+    //Filter IDs which aren't 24 chars and 0-9 a-f
+    if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
+        return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
+    }
+
     const article = await Article.findOne({ _id: req.body.id}).exec();
     if (!article) {
         return res.status(204).json({ message: `Article ID ${req.body.id} not found`});
@@ -61,8 +69,14 @@ const deleteArticle = async (req, res) => {
 
 const getArticle = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ message: 'Article ID required.'});
+    
+    const requestedId = req.params.id;
+    //Filter IDs which aren't 24 chars and 0-9 a-f
+    if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
+        return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
+    }
 
-    const article = await Article.findOne({ _id: req.params.id}).exec();
+    const article = await Article.findById(req.params.id).exec();
     if (!article) {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
@@ -75,8 +89,14 @@ const getArticle = async (req, res) => {
 const editArticle = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ message: 'Article ID required.'});
 
-    const article = await Article.findOne({ _id: req.body.id}).exec();
-    if (!article) {
+    const requestedId = req.params.id;
+    //Filter IDs which aren't 24 chars and 0-9 a-f
+    if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
+        return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
+    }
+
+    const article = await Article.findById(req.body.id).exec();
+    if (article === null) {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
     if (!verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator)||article.author !== req.user) {
@@ -89,7 +109,7 @@ const editArticle = async (req, res) => {
 
     const result = await article.save();
     res.json(result);
-    // For some reason, the correctly called ID Returns code 204 without any additional message, but an un-existing ID tries to reply with the structure of the entire database.
+    // For some reason, the correctly called ID Returns code 204 without any additional message, but an id that doesn't exist throws out a wall of text in terminal.
 }
 
 module.exports = { 
