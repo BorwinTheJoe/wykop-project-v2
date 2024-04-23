@@ -81,7 +81,6 @@ const getArticle = async (req, res) => {
         return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
     }
     res.json(article);
-    //For some reason, an ID that doesn't exist in the database tries to reply with the structure of the entire database.
 };
 
 // ------------------------//
@@ -90,7 +89,7 @@ const editArticle = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ message: 'Article ID required.'});
 
     const requestedId = req.params.id;
-    //Filter IDs which aren't 24 chars and 0-9 a-f
+    //Filter IDs which aren't 24 chars and 0-9 a-f, or crash.
     if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
         return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
     }
