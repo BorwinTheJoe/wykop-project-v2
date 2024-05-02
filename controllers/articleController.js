@@ -16,10 +16,6 @@ const handleNewArticle = async (req, res) => {
             title: title,
             content: content,
             author: req.user
-            // How to define the author being the logged in person?
-            // Potentially issues due to using the same variable name as model's data name
-            // Try to update the author user's "posts" with the ID of THIS post?
-            // Try to use Mongodb Auto _id's or to create own?
         });
 
         console.log(result);
@@ -47,7 +43,7 @@ const deleteArticle = async (req, res) => {
 
     //Delete article using Body instead of Params. Why??
     const requestedId = req.params.id;
-    //Filter IDs which aren't 24 chars and 0-9 a-f
+    //Filter IDs which aren't 24 chars and 0-9 a-f or crash.
     if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
         return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
     }
@@ -71,7 +67,7 @@ const getArticle = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ message: 'Article ID required.'});
     
     const requestedId = req.params.id;
-    //Filter IDs which aren't 24 chars and 0-9 a-f
+    //Filter IDs which aren't 24 chars and 0-9 a-f or crash.
     if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
         return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
     }
@@ -108,7 +104,6 @@ const editArticle = async (req, res) => {
 
     const result = await article.save();
     res.json(result);
-    // For some reason, the correctly called ID Returns code 204 without any additional message, but an id that doesn't exist throws out a wall of text in terminal.
 }
 
 module.exports = { 
