@@ -42,7 +42,7 @@ const deleteArticle = async (req, res) => {
 
 
     //Delete article using Body instead of Params. Why??
-    const requestedId = req.params.id;
+    const requestedId = req.body.id;
     //Filter IDs which aren't 24 chars and 0-9 a-f or crash.
     if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
         return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
@@ -98,12 +98,17 @@ const editArticle = async (req, res) => {
         return res.sendStatus(401);
     }
 
-    if (req.body?.title) article.title = req.body.title;
-    if (req.body?.content) article.content = req.body.content;
-    if (req.body?.tags) article.tags = req.body.tags;
+    try {
+        if (req.body?.title) article.title = req.body.title;
+        if (req.body?.content) article.content = req.body.content;
+        if (req.body?.tags) article.tags = req.body.tags;
 
-    const result = await article.save();
-    res.json(result);
+        const result = await article.save();
+        console.log(result);
+        res.status(201).json({ message: `Article "${title}" updated!`});
+    } catch (err) {
+        res.status(500).json({ message: err.message});
+    }
 }
 
 module.exports = { 
