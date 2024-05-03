@@ -8,11 +8,12 @@ router
     .route('/')
     .get(verifyRoles(ROLES_LIST.Admin), articleController.getAllArticles)
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator), articleController.deleteArticle)
-    .post(verifyRoles(ROLES_LIST.User), articleController.handleNewArticle);
+    .post(verifyRoles(ROLES_LIST.User), articleController.handleNewArticle)
+    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator, ROLES_LIST.User), articleController.editArticle);
 
 router
     .route('/:id')
     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator, ROLES_LIST.User), articleController.getArticle)
-    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator, ROLES_LIST.User), articleController.editArticle);
+    
 
 module.exports = router;

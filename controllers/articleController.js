@@ -82,30 +82,33 @@ const getArticle = async (req, res) => {
 // ------------------------//
 
 const editArticle = async (req, res) => {
-    if (!req?.params?.id) return res.status(400).json({ message: 'Article ID required.'});
+    if (!req?.body?.id) return res.status(400).json({ message: 'Article ID required.'});
 
-    const requestedId = req.params.id;
+    const requestedId = req.body.id;
     //Filter IDs which aren't 24 chars and 0-9 a-f, or crash.
     if (requestedId.length != 24 || !/[a-f0-9]{24}/.test(requestedId)) {
         return res.status(400).json({ message: 'Article ID has to be 24 characters long and be made up of hexadecimal characters.'});
     }
 
-    const article = await Article.findById(req.body.id).exec();
+    const article = await Article.findById(requestedId).exec();
     if (article === null) {
-        return res.status(204).json({ message: `Article ID ${req.params.id} not found.`});
+        return res.status(204).json({ message: `Article ID ${requestedId} not found.`});
     }
     if (!verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Moderator)||article.author !== req.user) {
         return res.sendStatus(401);
     }
 
     try {
+        console.log(`${req.body.title} | ${article.title}`);
+        console.log(`${req.body.content} | ${article.content}`);
+        console.log(`${req.body.tags} | ${article.tags}`);
         if (req.body?.title) article.title = req.body.title;
         if (req.body?.content) article.content = req.body.content;
         if (req.body?.tags) article.tags = req.body.tags;
 
         const result = await article.save();
         console.log(result);
-        res.status(201).json({ message: `Article "${title}" updated!`});
+        res.status(201).json({ message: `Article "${req.body.title}" updated!`});
     } catch (err) {
         res.status(500).json({ message: err.message});
     }
